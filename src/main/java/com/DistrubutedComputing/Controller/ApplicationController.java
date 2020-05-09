@@ -17,12 +17,10 @@ public class ApplicationController {
 	@Autowired
 	ApplicatonService service;
 
-	@RequestMapping(method = RequestMethod.POST, produces="application/json", value="/userlogin")
+	@RequestMapping(method = RequestMethod.POST, produces="application/json", value="/user/login")
 	@ResponseBody
-	public UserDTO login(@RequestBody UserDTO user) {
-		UserDTO returnedUser = new UserDTO();
-		service.login(user);
-		return returnedUser;
+	public String login(@RequestBody UserDTO user) {
+		return service.login(user);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, produces="application/json", value="/user/logoff")

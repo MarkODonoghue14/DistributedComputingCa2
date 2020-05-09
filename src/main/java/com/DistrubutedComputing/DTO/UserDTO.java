@@ -70,6 +70,10 @@ public class UserDTO {
 	this.isLoggedIn = isLoggedIn;
 	}
 	
+	public UserDTO(String username,String password) {
+		this.username  = username;
+		this.password = password;
+	}
 	
 	public UserDTO(User user) {
 		this.userId = user.getUserId();

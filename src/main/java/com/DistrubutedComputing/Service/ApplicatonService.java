@@ -15,35 +15,28 @@ public class ApplicatonService {
 	ApplicationDAO dao;
 	
 	public String login(UserDTO user) {
+		
 		String loginResponse = "";
-		try {
-		List <UserDTO> userList =  dao.login(user);
-      for (UserDTO returnedUser : userList) {
-			if (returnedUser.getUsername().equals(user.getUsername())) {
-				System.out.print("correct username");
-				if (returnedUser.getPassword().equals(user.getPassword())) {
-					System.out.print("username and password are correct");
-					if (!returnedUser.isLoggedIn()) {
-						dao.logUserIn(returnedUser);
-						loginResponse = "Successful Login";
-					} else {
-						loginResponse = "Sorry the user is already logged in";
-					}
-				} else {
-					loginResponse = "The password isn't correct";
+		
+		UserDTO foundUser = dao.findUser(user);
+		if(foundUser.getUsername() != null) {
+			System.out.print("not valid credentials");
+				if (!foundUser.isLoggedIn()) {
+					dao.login(foundUser);
+					loginResponse = "Login was successful";
+				} 
+				else {
+					loginResponse = "You are already signed in";
 				}
-			} else {
-				loginResponse = "No such user registered ";
-			}	
-		}
-
-	} catch (Exception e) {
-		e.printStackTrace();
-		loginResponse = "Error Logiing in User";
-	}
+		   }				
+	    else {
+			loginResponse = "Invalid login Credentials";
+	     	}
+		
 		return loginResponse;
 	}
-	
+
+
 	public String logOff(UserDTO user) {
 		String logoffResponse = "";
 		try {		

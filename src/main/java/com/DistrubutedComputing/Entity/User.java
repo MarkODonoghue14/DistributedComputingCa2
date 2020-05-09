@@ -13,7 +13,7 @@ import com.DistrubutedComputing.DTO.UserDTO;
 public class User {
 	
 	@Id
-	@Column(name = "User_Id")
+	@Column(name = "UserId")
 	private int userId;
 	
 	@Column(name = "Name")

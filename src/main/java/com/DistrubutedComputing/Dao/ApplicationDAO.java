@@ -19,6 +19,8 @@ import com.DistrubutedComputing.Entity.User;
 @Repository
 public class ApplicationDAO {
 	
+	final int POS_OF_USER = 0;
+	
 	@PersistenceUnit
 	private EntityManagerFactory entityManagerFactory;
 	
@@ -41,23 +43,31 @@ public class ApplicationDAO {
 		this.entityManager = entityManager;
 	}
 	
-	public  List<UserDTO> login(UserDTO user){
-		List <UserDTO> userList = new ArrayList<UserDTO>();		
-		List<User>foundCustomer =  entityManager.createQuery("Select e from user e", User.class).getResultList();
+	
+	public UserDTO findUser(UserDTO queriedUser) {
 		
-
-		
-		return userList ;
+		UserDTO user = new UserDTO();
+		List<User> foundUser = entityManager.createQuery("SELECT e FROM User e WHERE e.username = :username AND e.password = :password", User.class)
+				.setParameter("username", queriedUser.getUsername()).setParameter("password", queriedUser.getPassword()).getResultList();		
+		if (!foundUser.isEmpty()) {
+			user = new UserDTO(foundUser.get(0));
+		}		
+		return user;
 	}
 	
-	public void logUserIn(UserDTO userdto) {
-		userdto.setLoggedIn(true);
-		entityManager.persist(userdto);
-	}
 	
-	public void logUserOut(UserDTO userdto) {
-		userdto.setLoggedIn(false);
-		entityManager.persist(userdto);
+	public void login(UserDTO user){	
+		List<User>foundCustomer =  entityManager.createQuery("Select e from User e where e.username = :username ", User.class)
+				.setParameter("username", user.getUsername()).getResultList();
+		foundCustomer.get(POS_OF_USER).setLoggedIn(true);
+		entityManager.persist(foundCustomer.get(POS_OF_USER));
+	}
+		
+	public void logUserOut(UserDTO userdto) {		
+		List<User>foundCustomer =  entityManager.createQuery("Select e from User e where e.username = :username", User.class)
+				.setParameter("username", userdto.getUsername()).getResultList();
+    foundCustomer.get(POS_OF_USER).setLoggedIn(false);
+    entityManager.persist(foundCustomer.get(POS_OF_USER));
 	}
 
 
