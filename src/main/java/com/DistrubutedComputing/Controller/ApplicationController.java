@@ -20,13 +20,27 @@ public class ApplicationController {
 	@RequestMapping(method = RequestMethod.POST, produces="application/json", value="/user/login")
 	@ResponseBody
 	public String login(@RequestBody UserDTO user) {
+		try {
 		return service.login(user);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return "login unsuccesful server error";
+		}
+		
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, produces="application/json", value="/user/logoff")
 	@ResponseBody
 	public String logOff(@RequestBody UserDTO user) {
+		try {
 		return service.logOff(user);
+		}
+		catch (Exception e) {
+		e.printStackTrace();
+		return "Logoff unsuccessful server error";
+		}
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, produces="application/json", value="/test")
